@@ -16,17 +16,18 @@ class Core extends JPanel{
   this.setBackground(Color.black)
   this.addMouseListener(ML)
   this.addMouseMotionListener(ML)
-//  this.addMouseListener(MouseListener)
-
   override def paintComponent(g: Graphics): Unit = {
     super.paintComponent(g)
     draw(g)
     drawGrid(g)
   }
+  //  this.addMouseListener(MouseListener)
+
+  private val formula = "sin (x) * 5 + x/2"
 
   private def f(x: Double): Double = {
-//    math.sin(x + t*0.01) * 5
-    math.pow(x, 2)
+    math.sin(x + t*0.05) * 5 + x/2
+//    math.pow(x, 2)
   }
 
   private def drawGrid(g : Graphics): Unit = {
@@ -61,16 +62,10 @@ class Core extends JPanel{
   private def draw(g: Graphics): Unit = {
     g.setColor(Color.white)
     g.setFont(new Font("Arial", Font.ITALIC, 30))
-    g.drawString("sin (x) * 5" , 30 ,30)
+    g.drawString(formula , 30 ,30)
     drawGraph(g)
     scope(g)
     sleep()
-    val dx = getWidth / d
-    val dy = getHeight / d
-//    println("Size : " + dx*2, dy*2)
-    g.drawOval(ML.Obj.x,ML.Obj.y,10,10)
-
-    g.drawOval(sx,sy,100,100)
     sx += 1
     sy += 1
   }
@@ -90,27 +85,25 @@ class Core extends JPanel{
     var counter = 0
     var x = 0d
     val e = 0.05
-    val r = 3
+    val r = 9
     while (x < w/2) {
-      if((x*d + w/2).toInt != ((x+e)*d + w/2).toInt ){
-        if((f(x) *d + h/2).toInt != (f(x + e) *d + h/2).toInt){
-          g.fillOval((x*d + w/2).toInt, (-f(x) *d + h/2).toInt, r, r)
-//          g.drawLine((x*d + w/2).toInt, (f(x) *d + h/2).toInt , ((x + e)*d + w/2).toInt, (f(x + e) *d + h/2).toInt)
-          counter += 1
-        }
+      if((f(x) *d + h/2).toInt != (f(x + e) *d + h/2).toInt){
+//        g.fillOval((x*d + w/2).toInt, (-f(x) *d + h/2).toInt, r, r)
+//        g.drawLine((x*d + w/2).toInt, (-f(x) *d + h/2).toInt , ((x + e)*d + w/2).toInt, (-f(x + e) *d + h/2).toInt)
+        counter += 1
       }
+      g.fillOval((x*d + w/2).toInt, (-f(x) *d + h/2).toInt, r, r)
       x += e
     }
     g.setColor(Color.blue)
     x = 0d
     while (x > - w / 2) {
-      if ((w/2 - x * d ).toInt != (w/2 - (x + e) * d ).toInt) {
-        if ((h/2 - f(x) * d).toInt != (h/2 - f(x + e) * d).toInt) {
-          g.fillOval((w/2 + x * d).toInt, (h/2 - f(x) * d).toInt, r, r)
-//          g.drawLine((w/2 - x * d).toInt, (h/2 - f(x) * d).toInt , (w/2 - x * d).toInt, (h/2 - f(x) * d).toInt)
-          counter += 1
-        }
+      if ((h/2 - f(x) * d).toInt != (h/2 - f(x + e) * d).toInt) {
+//        g.fillOval((w/2 + x * d).toInt, (h/2 - f(x) * d).toInt, r, r)
+//        g.drawLine((w/2 - x * d).toInt, (h/2 - f(x) * d).toInt , (w/2 - x * d).toInt, (h/2 - f(x) * d).toInt)
+        counter += 1
       }
+      g.fillOval((w/2 + x * d).toInt, (h/2 - f(x) * d).toInt, r, r)
       x -= e
     }
 
